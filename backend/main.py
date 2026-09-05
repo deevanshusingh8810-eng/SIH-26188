@@ -2,7 +2,8 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from backend.database import (
     get_document as get_document_record,
     update_document_result,
-    add_history
+    add_history,
+    get_history
 )
 
 from backend.passport_validation import validate_passport_data
@@ -275,3 +276,17 @@ def get_verification_result(document_id: str):
         )
 
     return document
+@app.get("/history/{document_id}")
+def get_verification_history(document_id: str):
+    history = get_history(document_id)
+
+    if history is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Document not found"
+        )
+
+    return {
+        "document_id": document_id,
+        "history": history
+    }
