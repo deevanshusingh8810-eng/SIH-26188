@@ -228,3 +228,69 @@ The backend is designed to integrate with:
 - Verification history
 - Frontend dashboard
 - Final team integration
+## Student 2 - Backend and Database
+
+### Overview
+
+Implemented the backend infrastructure for document verification after the initial document upload and document-ID stage.
+
+### Database
+
+SQLite database is used to store verification information.
+
+Database file:
+`backend/verification.db`
+
+Database structure stores:
+
+- document_id
+- filename
+- file_type
+- OCR/extracted fields
+- validation result
+- tampering result
+- face verification result
+- risk score
+- overall status
+- timestamp
+
+Verification history/audit information is also stored for each processing stage.
+
+### API Endpoints
+
+#### Validate Passport
+
+**POST**
+
+`/validate/{document_id}`
+
+Validates passport data using mock OCR/extracted data during development.
+
+Checks include:
+
+- Required fields
+- Passport number format
+- Date format
+- Expiry date
+- Missing or invalid information
+
+Example:
+
+`POST /validate/TEST001`
+
+Example response:
+
+```json
+{
+  "document_id": "TEST001",
+  "passport_data": {
+    "name": "Test User",
+    "passport_number": "A1234567",
+    "date_of_birth": "2000-08-15",
+    "expiry_date": "2030-08-15"
+  },
+  "validation": {
+    "valid": true,
+    "issues": []
+  }
+}
